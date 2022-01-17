@@ -1,7 +1,6 @@
 package com.kash.bankingAPI.service.serviceImpl;
 
 import com.kash.bankingAPI.entity.User;
-import com.kash.bankingAPI.entity.security.Role;
 import com.kash.bankingAPI.entity.security.UserRole;
 import com.kash.bankingAPI.repository.RoleRepository;
 import com.kash.bankingAPI.repository.UserRepository;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +26,21 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
+
     private RoleRepository roleRepository;
-    @Autowired
-    private AccountService accountService;
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
+
+    private AccountService accountService;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, @Lazy AccountService accountService) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+
+        this.accountService = accountService;
+    }
 
 //    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AccountService accountService) {
 //        this.userRepository = userRepository;
