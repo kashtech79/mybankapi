@@ -1,5 +1,7 @@
 package com.kash.bankingAPI.controller;
 
+import com.kash.bankingAPI.entity.PrimaryAccount;
+import com.kash.bankingAPI.entity.SavingsAccount;
 import com.kash.bankingAPI.entity.User;
 import com.kash.bankingAPI.entity.security.UserRole;
 import com.kash.bankingAPI.repository.RoleRepository;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -44,6 +49,23 @@ public class HomeController {
             return new ResponseEntity<>("User has been created successfully", HttpStatus.OK);
             //            return new ResponseEntity<>(userService.register(user), HttpStatus.OK);
         }
+    }
+
+    @RequestMapping("/userfront")
+    public ResponseEntity<?> userFront(Principal principal){
+        User user = userService.findByUsername(principal.getName());
+        PrimaryAccount primaryAccount = user.getPrimaryAccount();
+        SavingsAccount savingsAccount = user.getSavingsAccount();
+
+        Map<String, Object> result = new HashMap<String,Object>();
+        result.put("PrimaryAccount",primaryAccount);
+        result.put("SavingsAccount",savingsAccount);
+
+        // Add any additional props that you want to add
+        return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+
+//        return new ResponseEntity<>(user.getPrimaryAccount().getAccountBalance(), HttpStatus.OK);
+//        return new ResponseEntity<>(user.getSavingsAccount().getAccountBalance(), HttpStatus.OK);
     }
 
 
