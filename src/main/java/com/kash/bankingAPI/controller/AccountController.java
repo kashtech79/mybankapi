@@ -45,4 +45,13 @@ public class AccountController {
         return new ResponseEntity<>("Amount has been deposit successfully", HttpStatus.OK);
 
     }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestParam("amount") String amount,
+                                     @RequestParam("accountType") String accountType,
+                                     Principal principal){
+        accountService.withdraw(Double.parseDouble(amount), accountType, principal);
+        return new ResponseEntity<>("Amount has been deposit successfully", HttpStatus.OK);
+
+    }
 }
